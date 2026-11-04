@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+include:
+  - project: vauchi/scripts
+    ref: 9adf5b8e9cd596075e3e5a34dc25971674c13628
+    file: /ci-templates/reuse.yml
+  - project: vauchi/scripts
+    ref: 9adf5b8e9cd596075e3e5a34dc25971674c13628
+    file: /ci-templates/lint-docs.yml
+
+variables:
+  VAUCHI_SCRIPTS_REF: "9adf5b8e9cd596075e3e5a34dc25971674c13628"
+
+stages: [lint, build]
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
+build:swift:
+  stage: build
+  tags: [macos-host, self-hosted]
+  parallel:
+    matrix:
+      - SDK: macosx
+        TRIPLE: arm64-apple-macosx14.0
+      - SDK: iphonesimulator
+        TRIPLE: arm64-apple-ios15.0-simulator
+  script:
+    - build_sdk=$(xcrun --sdk "$SDK" --show-sdk-path)
+    - swift build --sdk "$build_sdk" --triple "$TRIPLE" --scratch-path ".build/$SDK"
+  timeout: 10m
