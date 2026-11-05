@@ -10,6 +10,6 @@ let package = Package(
     products: [.library(name: "AppleDisplay", targets: ["AppleDisplay"])],
     targets: [
         .target(name: "AppleDisplay"),
-        .testTarget(name: "AppleDisplayTests", dependencies: ["AppleDisplay"]),
+        .testTarget(name: "AppleDisplayTests", dependencies: ["AppleDisplay"])
     ]
 )
