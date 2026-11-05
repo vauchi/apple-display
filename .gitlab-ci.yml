@@ -39,6 +39,9 @@ build:swift:
 test:swift:
   stage: test
   tags: [macos-tart, self-hosted]
+  image: vauchi-macos-ci-tools
+  variables:
+    TART_EXECUTOR_ALWAYS_PULL: "false"
   script:
     - swift test --scratch-path .build/tests
   timeout: 10m
