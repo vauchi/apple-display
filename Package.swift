@@ -8,5 +8,8 @@ let package = Package(
     name: "AppleDisplay",
     platforms: [.iOS(.v15), .macOS(.v14)],
     products: [.library(name: "AppleDisplay", targets: ["AppleDisplay"])],
-    targets: [.target(name: "AppleDisplay")]
+    targets: [
+        .target(name: "AppleDisplay"),
+        .testTarget(name: "AppleDisplayTests", dependencies: ["AppleDisplay"]),
+    ]
 )
